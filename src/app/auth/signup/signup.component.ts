@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { MatchPasswords } from '../validators/match-passwords';
 
 @Component({
   selector: 'app-signup',
@@ -7,9 +8,27 @@ import { FormGroup, FormControl } from '@angular/forms';
   styleUrls: ['./signup.component.scss'],
 })
 export class SignupComponent {
-  authForm = new FormGroup({
-    username: new FormControl(''),
-    password: new FormControl(''),
-    passwordConfirmation: new FormControl(''),
-  });
+  authForm: FormGroup = new FormGroup(
+    {
+      username: new FormControl('', [
+        Validators.required,
+        Validators.minLength(3),
+        Validators.maxLength(20),
+        Validators.pattern(/^[a-z0-9]+$/),
+      ]),
+      password: new FormControl('', [
+        Validators.required,
+        Validators.minLength(4),
+        Validators.maxLength(20),
+      ]),
+      passwordConfirmation: new FormControl('', [
+        Validators.required,
+        Validators.minLength(4),
+        Validators.maxLength(20),
+      ]),
+    },
+    { validators: [this.matchPasswords.validate] }
+  );
+
+  constructor(private matchPasswords: MatchPasswords) {}
 }

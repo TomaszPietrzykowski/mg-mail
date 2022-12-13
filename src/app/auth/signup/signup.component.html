@@ -3,12 +3,20 @@
   <div class="field">
     <label>Username</label><input formControlName="username" />
   </div>
+  <div>{{ authForm.get("username")?.errors | json }}</div>
+
   <div class="field">
     <label>Password</label><input formControlName="password" />
   </div>
+  <div>{{ authForm.get("password")?.errors | json }}</div>
+
   <div class="field">
     <label>Confirm Password</label
     ><input formControlName="passwordConfirmation" />
   </div>
+  <div>{{ authForm.get("passwordConfirmation")?.errors | json }}</div>
+
   <button class="ui submit button primary">Submit</button>
+  <div>{{ authForm.errors | json }}</div>
+  <div>{{ authForm.value | json }}</div>
 </form>
