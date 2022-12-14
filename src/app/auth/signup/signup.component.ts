@@ -7,6 +7,7 @@ import {
 } from '@angular/forms';
 import { MatchPasswords } from '../validators/match-passwords';
 import { UniqueUsername } from '../validators/unique-username';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-signup',
@@ -42,6 +43,27 @@ export class SignupComponent {
 
   constructor(
     private matchPasswords: MatchPasswords,
-    private uniqueUsername: UniqueUsername
+    private uniqueUsername: UniqueUsername,
+    private authService: AuthService
   ) {}
+
+  onSubmit() {
+    if (this.authForm.invalid) {
+      return;
+    }
+
+    this.authService.signup(this.authForm.value).subscribe({
+      next: (res) => {
+        // navigate to route
+      },
+      error: (err) => {
+        if (!err.status) {
+          // set err to form errors to read them in template
+          this.authForm.setErrors({ connectionError: true });
+        } else {
+          this.authForm.setErrors({ unknownError: true });
+        }
+      },
+    });
+  }
 }
