@@ -6,6 +6,11 @@ interface UsernameAvailableResponse {
   availaible: boolean;
 }
 
+interface SignedInResponse {
+  authenticated: boolean;
+  username: string;
+}
+
 interface SignupResponse {
   username: string;
 }
@@ -37,9 +42,7 @@ export class AuthService {
   // add options { withCtredentials: true } to stop angular from discarding cookies
   signup(credentials: SignupCredentials) {
     return this.http
-      .post<SignupResponse>(`${this.rootUrl}signup`, credentials, {
-        withCredentials: true,
-      })
+      .post<SignupResponse>(`${this.rootUrl}signup`, credentials)
       .pipe(
         tap(() => {
           this.signedIn$.next(true);
@@ -48,12 +51,10 @@ export class AuthService {
   }
 
   checkAuth() {
-    return this.http
-      .get(`${this.rootUrl}signedin`, { withCredentials: true })
-      .pipe(
-        tap((response) => {
-          console.log(response);
-        })
-      );
+    return this.http.get<SignedInResponse>(`${this.rootUrl}signedin`).pipe(
+      tap(({ authenticated }) => {
+        this.signedIn$.next(authenticated);
+      })
+    );
   }
 }
