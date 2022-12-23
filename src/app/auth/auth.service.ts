@@ -34,12 +34,25 @@ export class AuthService {
     );
   }
 
+  // add options { withCtredentials: true } to stop angular from discarding cookies
   signup(credentials: SignupCredentials) {
     return this.http
-      .post<SignupResponse>(`${this.rootUrl}signup`, credentials)
+      .post<SignupResponse>(`${this.rootUrl}signup`, credentials, {
+        withCredentials: true,
+      })
       .pipe(
         tap(() => {
           this.signedIn$.next(true);
+        })
+      );
+  }
+
+  checkAuth() {
+    return this.http
+      .get(`${this.rootUrl}signedin`, { withCredentials: true })
+      .pipe(
+        tap((response) => {
+          console.log(response);
         })
       );
   }
