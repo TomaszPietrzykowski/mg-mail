@@ -31,7 +31,7 @@ interface SigninCredentials {
 })
 export class AuthService {
   rootUrl: string = 'https://api.angular-email.com/auth/';
-  signedIn$ = new BehaviorSubject(false);
+  signedIn$ = new BehaviorSubject<boolean | null>(null);
 
   constructor(private http: HttpClient) {}
 
@@ -44,7 +44,7 @@ export class AuthService {
     );
   }
 
-  // add options { withCtredentials: true } to stop angular from discarding cookies
+  // add options { withCtredentials: true } to stop angular from discarding cookies (moved to interceptor)
   signup(credentials: SignupCredentials) {
     return this.http
       .post<SignupResponse>(`${this.rootUrl}signup`, credentials)
